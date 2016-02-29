@@ -1,6 +1,4 @@
-# Giphy Slash Command for Mixmax
-
-This is an open source Mixmax Slash Command. See <http://sdk.mixmax.com/docs/tutorial-giphy-slash-command> for more information about how to use this example code in Mixmax.
+A Slash Command to search NYTimes articles and resolve them with the article's picture and headline as links.
 
 ## Running locally
 
@@ -10,11 +8,11 @@ This is an open source Mixmax Slash Command. See <http://sdk.mixmax.com/docs/tut
 To simulate locally how Mixmax calls the typeahead URL (to return a JSON list of typeahead results), run:
 
 ```
-curl http://localhost:9145/typeahead?text=cats
+curl http://localhost:9145/typeahead?text=election
 ```
 
 To simulate locally how Mixmax calls the resolver URL (to return HTML that goes into the email), run:
 
 ```
-curl http://localhost:9145/resolver?text=cats
+curl http://localhost:9145/resolver?text=election
 ```

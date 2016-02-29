@@ -15,17 +15,13 @@ module.exports = function(req, res) {
     return;
   }
 
-  var response;
-  try {
+try {
     response = sync.await(request({
-      url: 'http://api.giphy.com/v1/gifs/search',
+      url: 'http://api.nytimes.com/svc/search/v2/articlesearch.json',
       qs: {
         q: term,
-        limit: 15,
-        api_key: key
+        'api-key': key
       },
-      gzip: true,
-      json: true,
       timeout: 10 * 1000
     }, sync.defer()));
   } catch (e) {
@@ -33,19 +29,21 @@ module.exports = function(req, res) {
     return;
   }
 
-  if (response.statusCode !== 200 || !response.body || !response.body.data) {
+  var parsed_response = JSON.parse(response.body);
+  
+  if (response.statusCode !== 200 || !response.body || !parsed_response['response']) {
     res.status(500).send('Error');
     return;
   }
 
-  var results = _.chain(response.body.data)
-    .reject(function(image) {
-      return !image || !image.images || !image.images.fixed_height_small;
+  var results = _.chain(parsed_response['response']['docs'])
+    .reject(function(article) {
+      return !article || !article['headline']['main'] || !article['_id'];
     })
-    .map(function(image) {
+    .map(function(article) {
       return {
-        title: '<img style="height:75px" src="' + image.images.fixed_height_small.url + '">',
-        text: 'http://giphy.com/' + image.id
+        title: article['headline']['main'],
+        text: article['_id']
       };
     })
     .value();
